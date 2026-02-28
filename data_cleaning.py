@@ -2,30 +2,31 @@ import pandas as pd
 import numpy as np
 
 # Load dataset
-data = pd.read_csv("dataset_micro.csv")
+data = pd.read_csv("startup_failure_prediction.csv")
 
-# Remove duplicates
+print("Initial Shape:", data.shape)
+
+# Remove duplicate rows
 data = data.drop_duplicates()
 
 # Handle missing values
 data = data.dropna()
 
-# Ensure numeric types
-numeric_cols = ["Annual Revenue ($M)", "Total Funding ($M)", "Number of Employees"]
+# Automatically detect numeric columns
+numeric_cols = data.select_dtypes(include=['int64', 'float64']).columns
 
+# Ensure numeric data types
 for col in numeric_cols:
     data[col] = pd.to_numeric(data[col], errors="coerce")
 
+# Drop rows that became NaN after conversion
 data = data.dropna()
 
 # Validate ranges (remove negative values)
-data = data[
-    (data["Annual Revenue ($M)"] >= 0) &
-    (data["Total Funding ($M)"] >= 0) &
-    (data["Number of Employees"] >= 0)
-]
+for col in numeric_cols:
+    data = data[data[col] >= 0]
 
-# Outlier detection using IQR
+# Outlier detection using IQR method
 for col in numeric_cols:
     Q1 = data[col].quantile(0.25)
     Q3 = data[col].quantile(0.75)
@@ -39,4 +40,5 @@ for col in numeric_cols:
 # Save cleaned dataset
 data.to_csv("cleaned_data.csv", index=False)
 
+print("Final Shape:", data.shape)
 print("Cleaning completed successfully")
