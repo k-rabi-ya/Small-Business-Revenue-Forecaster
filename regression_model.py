@@ -85,3 +85,17 @@ print("MAE:", mae_sgd)
 print("MSE:", mse_sgd)
 print("RMSE:", rmse_sgd)
 print("R2 Score:", r2_sgd)
+
+# -----------------------------
+# Model Comparison
+# -----------------------------
+
+results = pd.DataFrame({
+    "Model": ["Linear Regression", "SGD Regressor"],
+    "MAE": [mae, mae_sgd],
+    "RMSE": [rmse, rmse_sgd],
+    "R2 Score": [r2, r2_sgd]
+})
+
+print("\nModel Comparison:")
+print(results)
