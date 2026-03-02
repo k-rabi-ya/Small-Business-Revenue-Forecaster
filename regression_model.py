@@ -7,6 +7,21 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 # Load dataset
 data = pd.read_csv("data/cleaned_panel_data.csv")
 
+
+# Feature Validation
+
+print("Missing Values:\n", data.isnull().sum())
+
+print("\nData Types:\n", data.dtypes)
+
+print("\nBasic Statistics:\n", data.describe())
+
+print("\nUnique Values per Column:")
+for col in data.columns:
+    print(col, ":", data[col].nunique())
+
+print("\nDuplicate Rows:", data.duplicated().sum())
+
 # Select features
 X = data[[
     "firm_size",
