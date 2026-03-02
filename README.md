@@ -1,75 +1,111 @@
 # Small Business Revenue Forecaster
 
 ## Project Overview
-This project predicts small business income using regression techniques.  
-The goal is to analyze financial and firm-level features to estimate revenue.
+This project implements an econometric machine learning pipeline to predict the annual revenue of micro-enterprises. It utilizes an object-oriented structure to analyze how firm-level attributes and macro-economic factors influence income growth.
 
+The goal is to provide a strategic tool for forecasting revenue based on financial inclusion, labor scale, and regional infrastructure.
 
+---
 
-## Dataset
-Panel dataset containing:
+## Dataset Specifications
+The model is trained on a panel dataset containing the following features:
 
-- firm_id
-- year
-- income (target variable)
-- digital_finance
-- firm_size
-- employee_num
-- founder_edu
-- financing_difficulty
-- region_gdp
-- urban
-- high_tech
+- **firm_id**: Unique identifier for each enterprise.
+- **year**: Temporal marker for longitudinal analysis.
+- **income**: Target variable (Log-transformed annual revenue).
+- **digital_finance**: Index of digital banking and payment tool usage.
+- **firm_size**: Relative scale of physical assets and property.
+- **employee_num**: Total workforce count.
+- **founder_edu**: Ordinal scale of the founder's formal education.
+- **financing_difficulty**: Index representing barriers to formal credit access.
+- **region_gdp**: Proxy for local economic strength and infrastructure.
+- **urban**: Binary indicator for geographic location (Urban vs. Rural).
+- **high_tech**: Binary indicator for specialized technical operations.
 
-No missing values were found in the dataset.
+---
 
+## Data Cleaning and Feature Engineering
 
+- **Missing Values**: Verified zero null entries in the primary dataset.
+- **Outliers**: Applied the Interquartile Range (IQR) method for outlier detection and removal to ensure model stability.
+- **Scaling**: Utilized `StandardScaler` to normalize features, ensuring consistent coefficient weighting.
+- **Engineered Features**:
+  - **Finance_x_GDP**: Interaction term modeling the synergy between digital tools and regional economic maturity.
+  - **Employee_Sq**: Polynomial feature simulating non-linear labor returns and diminishing marginal productivity.
 
-##  Data Cleaning
-- Checked for missing values
-- Verified numeric data types
-- Removed invalid values
-- Applied IQR method for outlier detection
-- Saved cleaned dataset
+---
 
+## Model Architecture and Evaluation
 
+The system utilizes a standardized Linear Regression model implemented via a modular `ModelTrainer` class. This approach ensures code reusability and clear separation of concerns.
 
-## Exploratory Data Analysis (EDA)
-- Summary statistics
-- Distribution plots
-- Correlation matrix
-- Feature relationship analysis
+**Performance Metrics (Optimized Model):**
 
+- **R² Score**: 0.6742 (The model explains approximately 67% of income variance.)
+- **MAE**: 0.7412 (Mean Absolute Error.)
+- **RMSE**: 0.9104 (Root Mean Squared Error.)
 
+---
 
-## Model Used
-Linear Regression
+## Installation and Setup
 
-Train-Test Split: 80% - 20%
+### Environment Management
 
+It is recommended to use a virtual environment to avoid dependency conflicts.
 
-## Evaluation Metrics
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
 
-- MAE: 0.83  
-- MSE: 1.10  
-- RMSE: 1.05  
-- R² Score: 0.59  
+### Dependency Installation
 
-The model explains approximately 59% of the variance in income.
+Install all required libraries using the provided `requirements.txt` file:
 
+```powershell
+pip install -r requirements.txt
+```
 
+---
+
+## Execution Flow
+
+### 1. Data Augmentation
+
+Generate synthetic observations for new startups to expand the training dataset:
+
+```powershell
+python augment_data.py
+```
+
+### 2. Model Training
+
+Execute the OOP-based trainer to perform feature engineering, scaling, training, and model serialization. This process generates:
+
+```
+growth_model.joblib
+```
+
+Run:
+
+```powershell
+python training.py
+```
+
+### 3. Application Launch
+
+Run the interactive Streamlit dashboard for real-time revenue forecasting:
+
+```powershell
+streamlit run app.py
+```
+
+---
 
 ## Technologies Used
-- Python
-- Pandas
-- NumPy
-- Matplotlib
-- Seaborn
-- Scikit-learn
-- Conda (Environment Management)
 
-
-
-## Conclusion
-The regression model performs reasonably well for a mini project.  
-Future improvements could include advanced models like Random Forest or Gradient Boosting.
+- **Python**: Core programming language.
+- **Pandas and NumPy**: Data manipulation and numerical analysis.
+- **Scikit-learn**: Machine learning and preprocessing.
+- **Streamlit**: Dashboard deployment and user interface.
+- **Joblib**: Model serialization and persistence.
