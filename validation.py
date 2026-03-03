@@ -1,6 +1,5 @@
 # ============================================
 # EVALUATION OF SAVED MODEL (growth_model.joblib)
-# ============================================
 
 import pandas as pd
 import numpy as np
